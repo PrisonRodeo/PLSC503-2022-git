@@ -15,6 +15,8 @@ library(psych)
 library(stargazer)
 library(lmtest)
 library(plotrix)
+library(dplyr)
+library(dotwhisker)
 
 #######################################
 # STUPID REGRESSION TRICKS
@@ -253,4 +255,53 @@ scatterplot(model$fitted~Data$adrate,log="x",smooth=FALSE,boxplots=FALSE,
 plotCI(Data$adrate,model$fitted,uiw=(1.96*(fitted$se.fit)),
        log="x",xlab="Observed HIV Rate",ylab="Predicted HIV Rate")
 lines(lowess(Data$adrate,Data$adrate),lwd=2)
+
+########
+# Presentation...
+#
+# Re-fit three models:
+
+M1<-lm(adrate~polity+subsaharan+muslperc+literacy,data=Data)
+M2<-lm(adrate~polity+subsaharan+muslperc,data=Data)
+M3<-lm(adrate~polity+subsaharan+literacy,data=Data)
+
+# A (default) table:
+
+stargazer(M1,M2,M3)
+
+# A dot-whisker (or "ladder") plot of the un-rescaled
+# coefficients:
+
+pdf("ExampleDotWhisker.pdf",6,5)
+dwplot(list(M1,M2,M3),
+    vline=geom_vline(xintercept = 0,
+              colour = "black",linetype = 2),
+    vars_order=c("polity","subsaharan","muslperc","literacy")) %>%
+    relabel_predictors(c(polity="POLITY",
+                            subsaharan="Sub-Saharan",
+                            muslperc="Muslim Percentage",
+                            literacy="Literacy Rate")) +
+        theme_classic() +
+        xlab("Coefficient Estimate") +
+        scale_color_hue(labels=c('Full Model','w/o Literacy','w/o Muslim Pct.'))
+dev.off()        
+
+# A rescaled-by-two-standard-deviations dot-whisker plot:
+
+pdf("BetterDotWhisker.pdf",6,5)
+dwplot(list(M1,M2,M3),by_2sd = TRUE,
+       vline=geom_vline(xintercept = 0,
+                        colour = "black",linetype = 2),
+       vars_order=c("polity","subsaharan","muslperc","literacy")) %>%
+        relabel_predictors(c(polity="POLITY",
+                             subsaharan="Sub-Saharan",
+                             muslperc="Muslim Percentage",
+                             literacy="Literacy Rate")) +
+        theme_classic() +
+        xlab("Coefficient Estimate") +
+        scale_color_hue(labels=c('Full Model','w/o Literacy','w/o Muslim Pct.'))
+        dev.off()  
+
+
+
 
