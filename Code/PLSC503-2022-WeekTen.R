@@ -95,22 +95,22 @@ lrtest(hatsF,hatsR)
 
 # Compare to Wald:
 
-wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:1,H0=0)
+aod::wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:1,H0=0)
 
 
-# Wald test:
+# Wald test (mu = sigma = 2):
 
-wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:2,verbose=TRUE)
+aod::wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:2,H0=c(2,2),verbose=TRUE)
 
 # More Wald tests:
 
-wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:2,H0=c(0,2))
+aod::wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:2,H0=c(0,2))
 
-wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:2,H0=c(-0.2,1.5))
+aod::wald.test(Sigma=vcov(hats),b=coef(hats),Terms=1:2,H0=c(-0.2,1.5))
 
 # nonsensical:
 
-wald.test(Sigma=vcov(hats),b=coef(hats),Terms=2:2,H0=0)
+aod::wald.test(Sigma=vcov(hats),b=coef(hats),Terms=2:2,H0=0)
 
 # A nonsensical LR test of the same (insane) hypothesis...
 #
@@ -122,9 +122,8 @@ summary(hatsDumb)
 lrtest(hatsF,hatsDumb)
 
 
-
-
-#############################################
+##################################################
+##################################################
 # Binary response models...
 #
 # A picture of the LPM:
