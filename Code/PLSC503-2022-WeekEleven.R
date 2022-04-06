@@ -199,6 +199,14 @@ lines(bothR$COPE,bothR$OutHatsUB,lty=2)
 lines(bothR$COPE,bothR$OutHatsLB,lty=2)
 text(0.7,0.9,label="Republicans")
 
+# Simpler version (for when there aren't interactions,
+# and you re interested in a single continuous
+# predictor), using -margins-:
+
+pdf("PropHispPredPlot.pdf",7,6)
+par(mar=c(4,4,2,2))
+cplot(NAFTA.fit,"PropHisp",xlab="Proportion Hispanic")
+dev.off()
 
 ####################
 # Goodness of fit...
